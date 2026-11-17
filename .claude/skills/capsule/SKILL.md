@@ -11,7 +11,7 @@ Une capsule est un fichier de **données** : `capsules/NN-slug.html` ne contient
 
 Structure imposée par le moteur :
 1. **Ouverture**, générée : titre + accroche sur un nuage de particules.
-2. **Pages** : entre 4 et 10, c'est un repère. Moins si le sujet est mince, plus si chaque page reste un fait distinct.
+2. **Pages** : entre 4 et 20, c'est un repère. Moins si le sujet est mince, plus si chaque page reste un fait distinct.
 3. **À retenir**, généré à partir de `aRetenir` : 2 à 4 points, un arc d'anneau par point, et la liste des sources.
 
 ## Étapes

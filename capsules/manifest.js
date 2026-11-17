@@ -37,23 +37,24 @@ window.CAPSULES = [
     "sources": 0
   },
   {
-    "fichier": "capsules/03-registres-nexus.html",
+    "fichier": "capsules/03-la-complaisance.html",
     "numero": 3,
-    "theme": "Usages et Méthodologie",
-    "titre": "Le Nexus",
-    "accroche": "L'IA ne connaît que ce que vous lui montrez. Le Context Nexus range le savoir de l'équipe en quatre registres que les agents lisent avant d'agir.",
+    "theme": "Les bases",
+    "titre": "La complaisance",
+    "accroche": "L'IA a tendance à aller dans votre sens, même quand vous avez tort. Savoir pourquoi permet de lui demander la contradiction, pas l'applaudissement.",
     "duree": "2 min",
-    "pages": 7,
+    "pages": 8,
     "formes": [
+      "texte",
       "reseau",
-      "entonnoir",
-      "pile",
-      "texte",
       "barres",
+      "pictos",
+      "frise",
       "texte",
-      "frise"
+      "texte",
+      "pictos"
     ],
-    "sources": 0
+    "sources": 5
   },
   {
     "fichier": "capsules/04-le-contexte.html",
@@ -75,20 +76,25 @@ window.CAPSULES = [
     "sources": 7
   },
   {
-    "fichier": "capsules/05-alimentation-evenementielle.html",
+    "fichier": "capsules/05-registres-nexus.html",
     "numero": 5,
     "theme": "Usages et Méthodologie",
-    "titre": "Doc événementielle",
-    "accroche": "Un wiki meurt quand sa mise à jour devient une corvée. Branchée sur vos gestes du quotidien, la doc reste vivante pour l'équipe et ses agents IA.",
-    "duree": "2 min",
-    "pages": 8,
+    "titre": "Le Nexus",
+    "accroche": "L'IA ne connaît que ce que vous lui montrez. Le Context Nexus range le savoir de l'équipe en quatre registres, mis à jour par vos gestes du quotidien.",
+    "duree": "3 min",
+    "pages": 13,
     "formes": [
-      "texte",
-      "frise",
+      "reseau",
+      "entonnoir",
       "pile",
+      "texte",
+      "pile",
+      "frise",
+      "libre",
       "barres",
       "reseau",
-      "texte",
+      "dessin",
+      "barres",
       "texte",
       "frise"
     ],
@@ -312,24 +318,25 @@ window.CAPSULES = [
     "sources": 1
   },
   {
-    "fichier": "capsules/17-une-decision-deux-artefacts.html",
+    "fichier": "capsules/17-relire-ce-que-l-ia-produit.html",
     "numero": 17,
     "theme": "Usages et Méthodologie",
-    "titre": "Décision et directive",
-    "accroche": "Une décision d'architecture produit deux écrits : la mémoire du pourquoi pour l'équipe, la règle à appliquer pour l'agent. Les mélanger dégrade les deux.",
-    "duree": "2 min",
-    "pages": 8,
+    "titre": "Relire l'IA",
+    "accroche": "Ce que l'IA produit a l'air juste, c'est son talent. Code, spec ou compte rendu : voici quoi vérifier avant de dire « OK ».",
+    "duree": "3 min",
+    "pages": 9,
     "formes": [
-      "libre",
-      "pile",
       "texte",
-      "dessin",
-      "libre",
+      "grille",
+      "texte",
+      "barres",
+      "grille",
+      "pictos",
+      "texte",
       "frise",
-      "dessin",
       "pictos"
     ],
-    "sources": 0
+    "sources": 4
   },
   {
     "fichier": "capsules/18-nouvelles-responsabilites.html",

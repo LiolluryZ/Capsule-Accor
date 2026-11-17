@@ -9,7 +9,7 @@ Cherche dans la base de connaissance et rends-moi uniquement ce qui suit, au for
 - Thème : la famille de sujets (ex. Les bases, Usages, Risques, Outils)
 - Accroche : 1 à 2 phrases sur pourquoi ce concept compte pour un salarié
 
-## Faits (entre 4 et 10)
+## Faits (entre 4 et 20)
 Pour chaque fait :
 - Fait : une phrase affirmative
 - Chiffre (facultatif) : le nombre clé avec son unité, seulement si le fait en a un (ex. 42 %, × 5, 200 000)

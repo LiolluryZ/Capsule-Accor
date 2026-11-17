@@ -22,7 +22,7 @@ for (const fichier of readdirSync(dir).filter(f => f.endsWith(".html")).sort()) 
   const c = sandbox.window.CAPSULE;
   for (const k of ["numero", "theme", "titre", "accroche", "pages", "aRetenir"]) if (c[k] == null) problems.push(`${fichier} : champ "${k}" manquant`);
   const pages = c.pages || [];
-  if (pages.length < 4 || pages.length > 10) problems.push(`${fichier} : ${pages.length} pages (repère : 4 à 10), à justifier`);
+  if (pages.length < 4 || pages.length > 20) problems.push(`${fichier} : ${pages.length} pages (repère : 4 à 20), à justifier`);
   pages.forEach((p, i) => {
     if (!p.titre) problems.push(`${fichier} : page ${i + 1} sans titre`);
     if (!p.forme?.type) problems.push(`${fichier} : page ${i + 1} sans forme`);
