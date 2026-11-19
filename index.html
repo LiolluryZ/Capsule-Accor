@@ -193,9 +193,21 @@ footer a { color: var(--muted); text-underline-offset: 3px; }
   const grid = document.getElementById("grid"), msg = document.getElementById("msg");
 
   // Date du jour : une porte n'est ouvrable qu'en décembre, à partir de son jour.
+  // Pour tester en conditions réelles avant décembre : ?mois=11 décale le calendrier sur novembre
+  // (les portes s'ouvrent jour par jour selon la vraie date). Sans paramètre : décembre.
   const now = new Date();
-  const KEY = "capsules-avent-" + now.getFullYear();
-  const isOpenable = n => DEBUG || (now.getMonth() === 11 && n <= now.getDate());
+  const mParam = parseInt(new URLSearchParams(location.search).get("mois"), 10);
+  const M = mParam >= 1 && mParam <= 12 ? mParam - 1 : 11;           // index du mois (11 = décembre)
+  const TEST = M !== 11;
+  const NOMS = ["janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août", "septembre", "octobre", "novembre", "décembre"];
+  const ABR = ["janv.", "févr.", "mars", "avr.", "mai", "juin", "juil.", "août", "sept.", "oct.", "nov.", "déc."];
+  const MOIS = NOMS[M], MOIS_ABR = ABR[M];
+  const KEY = "capsules-avent-" + now.getFullYear() + (TEST ? "-test-" + (M + 1) : "");   // mémoire séparée : ne pollue pas décembre
+  const isOpenable = n => DEBUG || (now.getMonth() === M && n <= now.getDate());
+  if (TEST) {
+    document.querySelector(".hero .kicker").textContent = `24 portes · 1 capsule par jour · ${MOIS} (test)`;
+    document.querySelector(".hero .lead").textContent = document.querySelector(".hero .lead").textContent.replace("décembre", MOIS);
+  }
 
   // Mémoire des portes ouvertes (ignorée en debug : tout est refermé à chaque rafraîchissement).
   let opened = new Set();
@@ -237,22 +249,22 @@ footer a { color: var(--muted); text-underline-offset: 3px; }
     const panel = door.querySelector(".panel"), inner = door.querySelector(".inside");
     panel.setAttribute("aria-hidden", isOpen);
     panel.tabIndex = isOpen ? -1 : 0;
-    panel.setAttribute("aria-label", isOpen ? `Porte ${n} ouverte` : ok ? `Ouvrir la porte ${n}` : `Porte ${n} verrouillée, ouverture le ${n} décembre`);
-    panel.querySelector(".tag").textContent = isOpen ? "" : ok ? "Ouvrir" : `${n} déc.`;
+    panel.setAttribute("aria-label", isOpen ? `Porte ${n} ouverte` : ok ? `Ouvrir la porte ${n}` : `Porte ${n} verrouillée, ouverture le ${n} ${MOIS}`);
+    panel.querySelector(".tag").textContent = isOpen ? "" : ok ? "Ouvrir" : `${n} ${MOIS_ABR}`;
     if (inner.tagName === "A") inner.tabIndex = isOpen ? 0 : -1;
     if (isOpen) inner.removeAttribute("aria-hidden"); else inner.setAttribute("aria-hidden", "true");
   }
   function refresh() {
     grid.querySelectorAll(".door").forEach(label);
-    const dec = now.getMonth() === 11;
+    const dec = now.getMonth() === M;
     const stats = [[opened.size, "portes ouvertes"], [DOORS - opened.size, "à ouvrir"], [list.length, list.length > 1 ? "capsules" : "capsule"]];
     document.getElementById("stats").innerHTML = stats.map(([n, l]) => `<div class="stat"><b>${n}</b><span>${l}</span></div>`).join("");
     if (DEBUG) msg.innerHTML = "Mode test : toutes les portes s'ouvrent, rien n'est mémorisé.";
     else if (!dec) {
-      const first = new Date(now.getFullYear() + (now.getMonth() > 11 ? 1 : 0), 11, 1);
+      const first = new Date(now.getFullYear() + (now.getMonth() > M ? 1 : 0), M, 1);
       const days = Math.ceil((first - new Date(now.getFullYear(), now.getMonth(), now.getDate())) / 864e5);
-      msg.innerHTML = `Les portes s'ouvrent à partir du <b>1er décembre</b>${days > 0 ? ` : plus que <b>${days} jour${days > 1 ? "s" : ""}</b>` : ""}.`;
-    } else msg.innerHTML = `Nous sommes le <b>${now.getDate()} décembre</b> : les portes 1 à ${Math.min(now.getDate(), DOORS)} sont ouvrables.`;
+      msg.innerHTML = `Les portes s'ouvrent à partir du <b>1er ${MOIS}</b>${days > 0 ? ` : plus que <b>${days} jour${days > 1 ? "s" : ""}</b>` : ""}.`;
+    } else msg.innerHTML = `${TEST ? "Mode test : " : ""}nous sommes le <b>${now.getDate()} ${MOIS}</b> : les portes 1 à ${Math.min(now.getDate(), DOORS)} sont ouvrables.`.replace(/^./, c => c.toUpperCase());
   }
 
   // ---------- Effet d'ouverture : explosion de particules or + onde de choc ----------
@@ -294,7 +306,7 @@ footer a { color: var(--muted); text-underline-offset: 3px; }
     if (opened.has(n)) return;
     if (!isOpenable(n)) {
       door.classList.remove("shake"); void door.offsetWidth; door.classList.add("shake");
-      msg.innerHTML = `Patience : la porte <b>${n}</b> s'ouvrira le <b>${n} décembre</b>.`;
+      msg.innerHTML = `Patience : la porte <b>${n}</b> s'ouvrira le <b>${n} ${MOIS}</b>.`;
       return;
     }
     opened.add(n); save();
