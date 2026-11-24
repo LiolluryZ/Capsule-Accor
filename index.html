@@ -345,8 +345,9 @@ footer a { color: var(--muted); text-underline-offset: 3px; }
     ctx.clearRect(0, 0, W, H);
     const sy = scrollY * .15;
     for (const p of P) {
-      const x = (p.x + Math.sin(t * .0002 + p.s) * 12 * p.z + (mx - .5) * 30 * p.z + W) % W;
-      const y = ((p.y - sy * p.z + Math.cos(t * .00017 + p.s) * 10 * p.z) % H + H) % H;
+      const x = (p.x + Math.sin(t * .0004 + p.s) * 14 * p.z + (mx - .5) * 30 * p.z + W) % W;
+      const fall = reduce ? 0 : t * .025 * p.z; // chute lente, plus rapide pour les flocons proches
+      const y = ((p.y + fall - sy * p.z) % H + H) % H;
       ctx.globalAlpha = p.g ? .9 : .25 + p.z * .35;
       ctx.fillStyle = p.g ? gold : base;
       ctx.beginPath(); ctx.arc(x, y, p.g ? 1.6 : .6 + p.z * .9, 0, 6.283); ctx.fill();
