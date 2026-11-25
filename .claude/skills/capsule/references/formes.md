@@ -128,3 +128,7 @@ Une forme calculée en JavaScript, particule par particule.
 
 ## Feu d'artifice (effet de page)
 Ajoute `feuDArtifice: true` à une page (à côté de `forme`, `kicker`…) pour lancer des fusées dorées et lavande pendant environ 6 secondes quand elle devient active. L'effet passe derrière la carte de texte et est ignoré si le lecteur préfère moins d'animations. À réserver à une page de célébration (la dernière capsule du calendrier, par exemple).
+
+## Décors de Noël (ouverture)
+
+Ajoute `decor: "<nom>"` au niveau de `window.CAPSULE` (à côté de `titre`) pour poser un petit décor de particules sur la sphère d'ouverture. Noms : `sapin` (guirlandes clignotantes), `traineau` (le Père Noël traverse la sphère), `bonhomme` (bonhomme de neige), `etoiles` (étoiles filantes), `cadeaux` (pile de cadeaux au centre), `painDepice` (bonhomme en pain d'épice qui marche) et `lutins` (trois lutins qui dansent). Le décor disparaît dès qu'on défile et est ignoré si le lecteur préfère moins d'animations. Les anciennes clés `traineau: true` et `bonhommeDeNeige: true` fonctionnent encore. Pour un nouveau décor : ajouter une entrée dans `DECORS` de `engine/capsule.js` (dessin sur canevas en rouge codé 40 = clair, 80 = accent, 120 = cyan, puis `sprite(...)`).

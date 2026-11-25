@@ -15,6 +15,7 @@ window.CAPSULE = {
   numero: 18,
   theme: "Usages et Méthodologie",
   titre: "Vie d'un skill",
+  decor: "lutins",
   duree: "2 min",
   accroche: "Prompts, skills, agents : une fois partagés, ils deviennent des actifs. Comme du code, ils naissent, servent, vieillissent et se retirent.",
   pages: [
@@ -33,8 +34,8 @@ window.CAPSULE = {
         return [cx + r * s * Math.cos(a), y(cx) + r * u, r * s * Math.sin(a), 1];
       } },
       kicker: "Le cycle", chiffre: "5",
-      titre: "états : brouillon, actif, périmé, retiré, remplacé",
-      texte: "Chaque prompt, skill ou agent partagé passe par ces étapes. Le même cycle vaut pour le contexte et pour les specs : tout ce que lisent les agents vieillit et doit être revalidé un jour."
+      titre: "états : brouillon, actif, à revalider, retiré, remplacé",
+      texte: "Chaque prompt, skill ou agent partagé passe par ces étapes. Le même cycle vaut pour le contexte et pour les specs : tout ce que lisent les agents peut cesser d'être fiable et doit alors être revalidé."
     },
     {
       forme: { type: "dessin", vue: [96, 60], accent: [1], trait: 0, chemins: [
@@ -43,7 +44,7 @@ window.CAPSULE = {
       ] },
       kicker: "La carte d'identité",
       titre: "Un actif partagé a toujours un propriétaire et une date de validation",
-      texte: "Son niveau (entreprise, programme ou équipe), son registre, son propriétaire et la date de sa dernière validation l'accompagnent. Sans propriétaire nommé, personne ne sait qui le corrige quand il dérive."
+      texte: "Son niveau (entreprise, programme ou équipe), son registre, son propriétaire la date de sa dernière validation et le modèle d'IA avec lequel il a été validé l'accompagnent. Sans propriétaire nommé, personne ne sait qui le corrige quand il dérive."
     },
     {
       forme: { type: "libre", fn: (i, n, o) => {
@@ -79,9 +80,9 @@ window.CAPSULE = {
         if (q < 7) { const C = [[-2, .8], [-.6, .8], [-2, -.8], [-.6, -.8], [-1.3, 0]][Math.floor(i / 10) % 5]; return ball(C[0], C[1], .3, 0); }
         return ball(2.1, 0, .45, 1);
       } },
-      kicker: "Le périmé",
-      titre: "Périmé, un actif est signalé, pas supprimé",
-      texte: "Au-delà d'un délai fixé sans revalidation, l'actif est marqué périmé. Il reste consultable, mais sort des consignes permanentes de l'agent et de sa recherche documentaire jusqu'à ce qu'un responsable le revalide."
+      kicker: "La revalidation",
+      titre: "Un skill ne périme pas avec le temps, il se revalide quand le modèle change",
+      texte: "Un skill n'a pas de date de péremption : le temps qui passe ne l'abîme pas. En revanche, il a été validé avec un modèle précis. Si un autre modèle l'utilise, ou si le modèle habituel est mis à jour, rien ne garantit le même résultat : le skill repasse en « à revalider », rejoué sur des cas réels. Il reste consultable, mais ne devient une consigne permanente qu'une fois revalidé.",
     },
     {
       forme: { type: "texte", segments: ["RÔLE"], accent: "tout" },

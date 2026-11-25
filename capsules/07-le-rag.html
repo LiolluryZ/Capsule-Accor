@@ -15,6 +15,7 @@ window.CAPSULE = {
   numero: 7,
   theme: "Les bases",
   titre: "Le RAG",
+  decor: "etoiles",
   duree: "2 min",
   accroche: "Avant de répondre, l'IA peut chercher dans vos documents. Le RAG réduit les inventions, à condition que la recherche trouve le bon passage.",
   pages: [
@@ -42,8 +43,8 @@ window.CAPSULE = {
     {
       forme: { type: "barres", valeurs: [4, 68], accent: [1] },
       kicker: "La fraîcheur", chiffre: "68 %",
-      titre: "de bonnes réponses après le simple changement de l'index",
-      texte: "Sur 82 dirigeants ayant changé entre 2016 et 2018, le modèle répond juste à 68 % avec l'index de 2018, contre 4 % avec celui de 2016. Mettre à jour le savoir, c'est remplacer les documents, pas réentraîner le modèle.",
+      titre: "de réponses justes avec des documents à jour, contre 4 % avec des documents périmés",
+      texte: "Même modèle, même question : « Qui dirige tel pays ? ». Avec des documents de 2016, il se trompe presque toujours, car les dirigeants ont changé. Avec ceux de 2018, il répond juste 68 fois sur 100. Pour mettre le savoir à jour, on remplace les documents, pas le modèle.",
       source: { label: "Lewis et al. · Retrieval-Augmented Generation (2020)", url: "https://arxiv.org/abs/2005.11401" }
     },
     {
@@ -59,15 +60,6 @@ window.CAPSULE = {
       titre: "% de passages utiles manqués, avec contexte et reclassement",
       texte: "Dans les tests d'Anthropic, 5,7 % des passages pertinents échappent aux 20 premiers résultats. Ajouter du contexte à chaque passage, puis reclasser les résultats, ramène cet échec à 1,9 %. Mesuré en septembre 2024.",
       source: { label: "Anthropic · Introducing Contextual Retrieval", url: "https://www.anthropic.com/news/contextual-retrieval" }
-    },
-    {
-      forme: { type: "dessin", vue: [100, 56], trait: 3, accent: [0], chemins: [
-        "M6 6 C 18 46, 38 50, 50 50 C 62 50, 82 46, 94 6"
-      ] },
-      kicker: "La limite", chiffre: "> 20 %",
-      titre: "de baisse quand l'information utile est au milieu",
-      texte: "Les modèles exploitent mieux le début et la fin du contexte. Avec 20 ou 30 documents, GPT-3.5-Turbo peut tomber sous son score sans aucun document (56,1 %) : retrouvé ne veut pas dire utilisé.",
-      source: { label: "Liu et al. · Lost in the Middle (2023)", url: "https://arxiv.org/abs/2307.03172" }
     },
     {
       forme: { type: "pile", feuilles: 20, accent: "tous-les-6" },

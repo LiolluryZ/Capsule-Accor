@@ -113,7 +113,7 @@ window.CAPSULES = [
       "libre",
       "barres"
     ],
-    "sources": 0
+    "sources": 1
   },
   {
     "fichier": "capsules/07-le-rag.html",
@@ -122,7 +122,7 @@ window.CAPSULES = [
     "titre": "Le RAG",
     "accroche": "Avant de répondre, l'IA peut chercher dans vos documents. Le RAG réduit les inventions, à condition que la recherche trouve le bon passage.",
     "duree": "2 min",
-    "pages": 8,
+    "pages": 7,
     "formes": [
       "frise",
       "pile",
@@ -130,10 +130,9 @@ window.CAPSULES = [
       "barres",
       "texte",
       "barres",
-      "dessin",
       "pile"
     ],
-    "sources": 8
+    "sources": 7
   },
   {
     "fichier": "capsules/08-l-agent.html",
@@ -221,15 +220,18 @@ window.CAPSULES = [
     "titre": "Spec-Driven",
     "accroche": "Avec le Spec-Driven Development, l'effort passe du code à des spécifications claires, pour que l'IA livre le résultat attendu sans mauvaise surprise.",
     "duree": "2 min",
-    "pages": 5,
+    "pages": 8,
     "formes": [
       "texte",
       "reseau",
       "frise",
+      "frise",
+      "frise",
+      "pictos",
       "texte",
       "texte"
     ],
-    "sources": 0
+    "sources": 3
   },
   {
     "fichier": "capsules/13-comment-un-agent-lit.html",

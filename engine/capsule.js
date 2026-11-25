@@ -459,6 +459,198 @@
     });
     group.add(new THREE.Points(geo, mat));
 
+    // ---------- Décors de Noël : `decor: "<nom>"` dans CAPSULE ajoute un petit décor de particules à l'ouverture ----------
+    // Noms : sapin, traineau, bonhomme, etoiles, cadeaux, painDepice, lutins. Ils disparaissent dès qu'on défile
+    // et sont ignorés si le lecteur préfère moins d'animations.
+    // Particules à part : positions p (x,y,z), codes de couleur a (0 clair, 1 accent, 2 cyan), fondu f (0 → 1).
+    function cloud(p, a, f, size, blink) {
+      const n = a.length, seed = new Float32Array(n);
+      for (let i = 0; i < n; i++) seed[i] = Math.random();
+      const sg = new THREE.BufferGeometry();
+      sg.setAttribute("position", new THREE.BufferAttribute(p, 3));
+      sg.setAttribute("aAccent", new THREE.BufferAttribute(a, 1));
+      sg.setAttribute("aSeed", new THREE.BufferAttribute(seed, 1));
+      sg.setAttribute("aFade", new THREE.BufferAttribute(f, 1));
+      const sm = new THREE.ShaderMaterial({
+        transparent: true, depthWrite: false,
+        uniforms: { uTime: { value: 0 }, uPR: { value: renderer.getPixelRatio() }, uShow: { value: 0 }, uBlink: { value: blink ? 1 : 0 }, uBase: { value: col("--paper") }, uAccent: { value: col("--accent-hi") } },
+        vertexShader: `attribute float aAccent; attribute float aSeed; attribute float aFade; uniform float uTime, uPR, uBlink; varying float vA; varying float vF;
+          void main() { vec3 p = position + .006 * vec3(sin(uTime * 6. + aSeed * 40.), cos(uTime * 5. + aSeed * 23.), 0.);
+            vec4 mv = modelViewMatrix * vec4(p, 1.); gl_Position = projectionMatrix * mv;
+            float ph = fract(sin(dot(floor(position.xy * 9.), vec2(12.9898, 78.233))) * 43758.5453);
+            float bl = (uBlink > .5 && aAccent > .5) ? .15 + .85 * step(0., sin(uTime * (2.2 + ph * 2.) + ph * 40.)) : 1.;
+            gl_PointSize = ${size.toFixed(1)} * uPR / -mv.z; vA = aAccent; vF = aFade * bl; }`,
+        fragmentShader: `uniform vec3 uBase, uAccent; uniform float uShow; varying float vA; varying float vF;
+          void main() { float d = length(gl_PointCoord - .5); if (d > .5) discard;
+            vec3 c = vA < .5 ? uBase : (vA < 1.5 ? uAccent : vec3(0., .89, .925));
+            gl_FragColor = vec4(c, smoothstep(.5, .15, d) * .95 * uShow * vF); }`
+      });
+      const pts = new THREE.Points(sg, sm); pts.visible = false; group.add(pts);
+      return pts;
+    }
+    // Un canevas dessiné (rouge codé : 40 = clair, 80 = accent, 120 = cyan) devient un nuage ; `foot` = ligne posée sur l'origine.
+    function sprite(g, W, H, foot, width, M, size, blink) {
+      const px = [], d = g.getImageData(0, 0, W, H).data;
+      for (let y = 0; y < H; y += 2) for (let x = 0; x < W; x += 2) { const o = (y * W + x) * 4; if (d[o + 3] > 200) px.push(x, y, Math.max(0, Math.round(d[o] / 40) - 1)); }
+      const np = px.length / 3, p = new Float32Array(M * 3), a = new Float32Array(M), f = new Float32Array(M).fill(1), k = width / W;
+      for (let i = 0; i < M; i++) {
+        const j = Math.floor(Math.random() * np) * 3;
+        p[i*3] = (px[j] - W / 2) * k + (Math.random() - .5) * k * 2; p[i*3+1] = (foot - px[j+1]) * k + (Math.random() - .5) * k * 2; p[i*3+2] = gauss() * .04;
+        a[i] = px[j + 2];
+      }
+      return cloud(p, a, f, size, blink);
+    }
+    const LIGHT = "rgb(40,0,0)", GOLD = "rgb(80,0,0)", CYAN = "rgb(120,0,0)";
+    const canvas2d = (W, H) => { const cv = document.createElement("canvas"); cv.width = W; cv.height = H; const g = cv.getContext("2d", { willReadFrequently: true }); g.lineCap = "round"; g.lineJoin = "round"; return g; };
+    const disc = (g, x, y, r, c) => { g.fillStyle = c; g.beginPath(); g.arc(x, y, r, 0, TAU); g.fill(); };
+    const line = (g, c, w, pts) => { g.strokeStyle = c; g.lineWidth = w; g.beginPath(); pts.forEach(([x, y], k) => g[k ? "lineTo" : "moveTo"](x, y)); g.stroke(); };
+    const poly = (g, c, pts) => { g.fillStyle = c; g.beginPath(); pts.forEach(([x, y], k) => g[k ? "lineTo" : "moveTo"](x, y)); g.closePath(); g.fill(); };
+    const holes = (g, fn) => { g.save(); g.globalCompositeOperation = "destination-out"; g.fillStyle = "#000"; g.strokeStyle = "#000"; fn(); g.restore(); };
+    const hash = n => { const s = Math.sin(n * 12.9898) * 43758.5453; return s - Math.floor(s); };
+
+    const DECORS = {
+      sapin: () => {
+        const g = canvas2d(260, 380);
+        line(g, LIGHT, 36, [[130, 330], [130, 360]]);
+        [[40, 150, 62], [100, 235, 88], [170, 325, 112]].forEach(([a, b, h]) => {
+          poly(g, LIGHT, [[130, a], [130 + h, b], [130 - h, b]]);
+          [.55, .85].forEach(fr => {
+            const y = a + fr * (b - a), w = h * fr;
+            g.strokeStyle = GOLD; g.lineWidth = 5; g.beginPath(); g.moveTo(130 - w * .9, y); g.quadraticCurveTo(130, y + 34, 130 + w * .9, y); g.stroke();
+            [-.9, -.45, 0, .45, .9].forEach((q, i) => disc(g, 130 + w * q, y + 34 * (1 - q * q) / 2 + 2, 7, (i + a) % 2 ? CYAN : GOLD));
+          });
+        });
+        const star = []; for (let k = 0; k < 10; k++) { const r = k % 2 ? 11 : 26, A = -Math.PI / 2 + k * Math.PI / 5; star.push([130 + r * Math.cos(A), 26 + r * Math.sin(A)]); }
+        poly(g, GOLD, star);
+        const t = sprite(g, 260, 380, 372, 1.45, 3400, 15, true); t.position.set(2.05, -2.45, 1.2);
+        return time => { t.rotation.z = Math.sin(time * 1.1) * .01; return [t]; };
+      },
+      traineau: () => {
+        const W = 700, H = 260, g = canvas2d(W, H);
+        g.translate(0, 62);
+        const deer = (x, y, lead) => {
+          g.fillStyle = LIGHT; g.beginPath(); g.ellipse(x, y, 40, 19, 0, 0, TAU); g.fill();
+          line(g, LIGHT, 15, [[x + 30, y - 8], [x + 52, y - 38]]); disc(g, x + 58, y - 42, 12, LIGHT);
+          line(g, LIGHT, 9, [[x + 26, y + 10], [x + 58, y + 36]]); line(g, LIGHT, 9, [[x + 16, y + 12], [x + 30, y + 50]]);
+          line(g, LIGHT, 9, [[x - 26, y + 10], [x - 58, y + 32]]); line(g, LIGHT, 9, [[x - 16, y + 12], [x - 42, y + 48]]);
+          line(g, LIGHT, 6, [[x - 38, y - 6], [x - 54, y - 16]]);
+          line(g, LIGHT, 5, [[x + 54, y - 54], [x + 46, y - 88], [x + 58, y - 104]]);
+          line(g, LIGHT, 4, [[x + 47, y - 78], [x + 32, y - 90]]); line(g, LIGHT, 4, [[x + 50, y - 90], [x + 68, y - 94]]);
+          if (lead) disc(g, x + 71, y - 40, 7, GOLD);
+        };
+        line(g, LIGHT, 3, [[268, 82], [345, 112]]); line(g, LIGHT, 3, [[400, 112], [455, 112]]); line(g, LIGHT, 3, [[520, 112], [580, 112]]);
+        deer(345, 112, false); deer(470, 112, false); deer(590, 112, true);
+        g.fillStyle = GOLD; g.beginPath(); g.moveTo(60, 72); g.lineTo(215, 72); g.quadraticCurveTo(250, 72, 260, 46); g.lineTo(272, 50);
+        g.quadraticCurveTo(266, 104, 215, 114); g.lineTo(80, 114); g.quadraticCurveTo(58, 114, 60, 72); g.fill();
+        line(g, GOLD, 6, [[60, 134], [235, 134], [268, 128], [276, 104]]); line(g, GOLD, 6, [[105, 114], [105, 134]]); line(g, GOLD, 6, [[200, 114], [200, 134]]);
+        disc(g, 78, 62, 26, LIGHT);
+        g.fillStyle = GOLD; g.beginPath(); g.ellipse(150, 52, 27, 30, 0, 0, TAU); g.fill();
+        disc(g, 150, 12, 15, GOLD); disc(g, 154, 24, 12, LIGHT);
+        g.fillStyle = GOLD; g.beginPath(); g.moveTo(134, 6); g.quadraticCurveTo(150, -26, 188, -6); g.lineTo(165, 6); g.closePath(); g.fill();
+        disc(g, 189, -6, 7, LIGHT);
+        const s = sprite(g, W, H, 62, 4.3, 3200, 15); s.position.z = 1.4;
+        // Un passage de 7 s toutes les 13 s, de gauche à droite, avec un léger tangage.
+        return time => {
+          const per = 13, ph = (((time - 1.2) % per) + per) % per, u = ph / 7;
+          if (u >= 1) return [];
+          s.position.x = -8.5 + u * 17; s.position.y = 1.85 + Math.sin(u * TAU * 1.5) * .22; s.rotation.z = Math.cos(u * TAU * 1.5) * .07;
+          return [s, Math.min(1, u * 8, (1 - u) * 8)];
+        };
+      },
+      bonhomme: () => {
+        const W = 200, H = 330, g = canvas2d(W, H);
+        line(g, LIGHT, 7, [[62, 168], [14, 128]]); line(g, LIGHT, 5, [[34, 146], [30, 120]]); line(g, LIGHT, 5, [[30, 142], [10, 150]]);
+        line(g, LIGHT, 7, [[138, 168], [188, 124]]); line(g, LIGHT, 5, [[166, 142], [172, 116]]); line(g, LIGHT, 5, [[170, 146], [190, 150]]);
+        disc(g, 100, 258, 62, LIGHT); disc(g, 100, 168, 46, LIGHT); disc(g, 100, 92, 33, LIGHT);
+        line(g, GOLD, 14, [[64, 124], [136, 124]]); line(g, GOLD, 14, [[118, 124], [124, 168]]);
+        g.fillStyle = GOLD; g.fillRect(58, 54, 84, 8); g.fillRect(72, 12, 56, 44);
+        poly(g, GOLD, [[100, 94], [144, 102], [100, 108]]);
+        [158, 182, 246, 272].forEach(y => disc(g, 100, y, 6, GOLD));
+        holes(g, () => { disc(g, 88, 84, 4, "#000"); disc(g, 112, 84, 4, "#000"); });
+        const t = sprite(g, W, H, H, 1.0, 2400, 15); t.position.set(2.0, -2.35, 1.2);
+        return time => { t.rotation.z = Math.sin(time * 1.3) * .035; return [t]; };
+      },
+      etoiles: () => {
+        // Trois étoiles filantes, chacune sur son rythme : une tête brillante et une traîne qui s'efface.
+        const mk = () => {
+          const n = 340, p = new Float32Array(n * 3), a = new Float32Array(n), f = new Float32Array(n);
+          for (let i = 0; i < n; i++) {
+            const u = Math.pow(Math.random(), 1.4), L = 3.1;
+            p[i*3] = -u * L + gauss() * .012; p[i*3+1] = u * L * .42 + gauss() * .015; p[i*3+2] = 0;
+            a[i] = u < .05 ? 2 : 0; f[i] = Math.pow(1 - u, 1.4);
+          }
+          return cloud(p, a, f, 24);
+        };
+        const stars = [mk(), mk(), mk()], cfg = [[0, 4.6], [1.7, 5.1], [3.2, 4.2]];
+        return time => stars.map((s, k) => {
+          const [off, per] = cfg[k], t = time + off * 2 + 3, c = Math.floor(t / per), u = (t % per) / 1.6;
+          if (u >= 1) return null;
+          const x0 = -5.5 + hash(c * 3 + k) * 3.5, y0 = 1.4 + hash(c * 7 + k + 1) * 2.4;
+          s.position.set(x0 + u * 11, y0 - u * 4.6, 1.2);
+          return [s, Math.min(1, u * 6, (1 - u) * 4)];
+        }).filter(Boolean).flat();
+      },
+      cadeaux: () => {
+        const W = 360, H = 300, g = canvas2d(W, H);
+        const box = (x, y, w, h) => {
+          holes(g, () => g.fillRect(x - 7, y - 7, w + 14, h + 14));
+          g.fillStyle = LIGHT; g.fillRect(x, y, w, h);
+          g.fillStyle = GOLD; g.fillRect(x + w / 2 - 9, y, 18, h); g.fillRect(x, y + h * .38, w, 16);
+          g.beginPath(); g.ellipse(x + w / 2 - 20, y - 10, 24, 12, -.5, 0, TAU); g.fill(); g.beginPath(); g.ellipse(x + w / 2 + 20, y - 10, 24, 12, .5, 0, TAU); g.fill();
+          disc(g, x + w / 2, y - 4, 8, GOLD);
+        };
+        box(40, 165, 150, 125); box(208, 205, 120, 85); box(92, 76, 106, 84);
+        const t = sprite(g, W, H, H - 10, 2.7, 2900, 15, false); t.position.set(0, -1.7, 1.0);
+        return time => { t.position.y = -1.7 + Math.sin(time * 1.4) * .06; t.rotation.y = Math.sin(time * .7) * .4; return [t]; };
+      },
+      painDepice: () => {
+        const W = 200, H = 260, g = canvas2d(W, H);
+        line(g, LIGHT, 36, [[30, 122], [170, 122]]); line(g, LIGHT, 58, [[100, 90], [100, 172]]);
+        line(g, LIGHT, 36, [[80, 182], [62, 238]]); line(g, LIGHT, 36, [[120, 182], [138, 238]]);
+        disc(g, 100, 54, 42, LIGHT);
+        [[34, 122], [166, 122], [62, 240], [138, 240]].forEach(([x, y]) => disc(g, x, y, 8, GOLD));
+        disc(g, 100, 128, 7, GOLD); disc(g, 100, 156, 7, GOLD);
+        poly(g, GOLD, [[100, 100], [76, 90], [76, 112]]); poly(g, GOLD, [[100, 100], [124, 90], [124, 112]]);
+        g.strokeStyle = GOLD; g.lineWidth = 5; g.beginPath(); g.arc(100, 60, 20, .25 * Math.PI, .75 * Math.PI); g.stroke();
+        disc(g, 86, 46, 5, GOLD); disc(g, 114, 46, 5, GOLD);
+        const t = sprite(g, W, H, 248, .85, 2300, 15);
+        // Il marche d'un bord à l'autre au pied de la sphère et fait demi-tour en bout de course.
+        return time => {
+          const u = (time * .22) % 2, d = u < 1 ? 1 : -1, x = -3 + 6 * (u < 1 ? u : 2 - u);
+          t.position.set(x, -2.35 + Math.abs(Math.sin(time * 9)) * .09, 1.2); t.scale.x = d; t.rotation.z = Math.sin(time * 9) * .1;
+          return [t];
+        };
+      },
+      lutins: () => {
+        const mk = hat => {
+          const W = 140, H = 240, g = canvas2d(W, H);
+          line(g, LIGHT, 10, [[50, 124], [20, 84]]); line(g, LIGHT, 10, [[90, 124], [120, 84]]); disc(g, 20, 80, 8, LIGHT); disc(g, 120, 80, 8, LIGHT);
+          line(g, LIGHT, 12, [[58, 175], [54, 222]]); line(g, LIGHT, 12, [[82, 175], [86, 222]]);
+          line(g, GOLD, 12, [[54, 224], [34, 228]]); line(g, GOLD, 12, [[86, 224], [106, 228]]);
+          poly(g, GOLD, [[48, 116], [92, 116], [100, 175], [40, 175]]); g.fillStyle = CYAN; g.fillRect(42, 150, 56, 8);
+          disc(g, 70, 92, 24, LIGHT);
+          poly(g, LIGHT, [[48, 90], [30, 80], [48, 104]]); poly(g, LIGHT, [[92, 90], [110, 80], [92, 104]]);
+          g.fillStyle = hat; g.beginPath(); g.moveTo(42, 68); g.quadraticCurveTo(60, 22, 108, 12); g.lineTo(98, 68); g.closePath(); g.fill();
+          g.fillStyle = LIGHT; g.fillRect(38, 64, 64, 10); disc(g, 109, 12, 8, LIGHT);
+          holes(g, () => { disc(g, 62, 92, 3.5, "#000"); disc(g, 78, 92, 3.5, "#000"); });
+          return sprite(g, W, H, 232, .72, 1500, 15);
+        };
+        const els = [mk(GOLD), mk(CYAN), mk(GOLD)], xs = [-1.45, 0, 1.45];
+        return time => els.map((e, k) => {
+          const w = time * 5.2 + k * 2.1, j = Math.abs(Math.sin(w));
+          e.position.set(xs[k] + Math.sin(w * .5) * .12, -2.25 + j * .24, 1.2 + k * .01); e.rotation.z = Math.sin(w) * .16; e.scale.y = 1 + (1 - j) * .05;
+          return [e];
+        }).flat();
+      }
+    };
+    // `decor` accepte un nom ou, pour compatibilité, les anciennes clés `traineau` et `bonhommeDeNeige`.
+    const decorName = C.decor || (C.traineau ? "traineau" : C.bonhommeDeNeige ? "bonhomme" : null);
+    let decorTick = null, decorObjs = [];
+    if (decorName && !reduce) {
+      if (!DECORS[decorName]) console.error(`Décor inconnu : "${decorName}". Décors disponibles : ${Object.keys(DECORS).join(", ")}`);
+      else { decorTick = DECORS[decorName](); }
+    }
+
     // ---------- Mise en page de la scène ----------
     function layout() {
       const w = innerWidth, h = innerHeight;
@@ -511,6 +703,18 @@
       rx += ((my * .25 * loose) - rx) * .06;
       group.rotation.set(rx, ry, 0);
       mat.uniforms.uTime.value = reduce ? 0 : time;
+      if (decorTick) {
+        // Chaque décor renvoie une liste [objet, fondu?, objet, fondu?…] ; ce qui n'est pas renvoyé est masqué.
+        const show = Math.max(0, Math.min(1, 1 - cur * 1.6)) * Math.min(1, time / 1.5);
+        const live = show > 0 ? decorTick(time) : [];
+        decorObjs.forEach(o => { o.visible = false; });
+        decorObjs = [];
+        for (let q = 0; q < live.length; q++) {
+          const o = live[q]; if (!o || !o.isPoints) continue;
+          const fade = typeof live[q + 1] === "number" ? live[q + 1] : 1;
+          o.visible = true; o.material.uniforms.uShow.value = show * fade; o.material.uniforms.uTime.value = time; decorObjs.push(o);
+        }
+      }
       renderer.render(scene, camera);
       requestAnimationFrame(frame);
     }
