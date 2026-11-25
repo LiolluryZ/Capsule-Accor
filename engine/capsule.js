@@ -102,7 +102,7 @@
     const fireworks = (() => {
       let cv, g, W, H, rockets = [], sparks = [], running = false, until = 0, next = 0;
       const css = getComputedStyle(document.documentElement);
-      const cols = ["--accent", "--accent-hi", "--paper", "--particle"].map(v => css.getPropertyValue(v).trim() || "#D1AD78");
+      const cols = ["--accent", "--accent-hi", "--paper", "--particle"].map(v => css.getPropertyValue(v).trim() || "#DF2147");
       const size = () => { const d = Math.min(devicePixelRatio, 2); W = innerWidth; H = innerHeight; cv.width = W * d; cv.height = H * d; g.setTransform(d, 0, 0, d, 0, 0); };
       const launch = () => rockets.push({ x: W * (.15 + Math.random() * .7), y: H, vy: -(H * (.016 + Math.random() * .006)), top: H * (.15 + Math.random() * .35), c: cols[(Math.random() * 2) | 0] });
       const explode = r => {
@@ -388,7 +388,7 @@
         const W = 1400, H = 520, cv = document.createElement("canvas");
         cv.width = W; cv.height = H;
         const ctx = cv.getContext("2d", { willReadFrequently: true });
-        const fam = '"Red Hat Display", "Montserrat", "Arial Black", sans-serif';
+        const fam = '"Nunito", "Arial Black", sans-serif';
         let fs = 470; ctx.font = `900 ${fs}px ${fam}`;
         const gapPx = () => fs * .12;
         let widths = segments.map(s => ctx.measureText(s).width);
@@ -404,7 +404,7 @@
     };
 
     // Attendre la police d'affichage avant de dessiner le texte en particules.
-    try { await Promise.race([document.fonts.load('900 100px "Red Hat Display"'), new Promise(r => setTimeout(r, 2500))]); } catch (e) {}
+    try { await Promise.race([document.fonts.load('900 100px "Nunito"'), new Promise(r => setTimeout(r, 2500))]); } catch (e) {}
     const targets = steps.map(s => {
       const f = s.forme || { type: "nuage" };
       if (!SHAPES[f.type]) console.error(`Forme inconnue : "${f.type}". Formes disponibles : ${Object.keys(SHAPES).join(", ")}`);

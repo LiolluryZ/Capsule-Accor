@@ -116,23 +116,24 @@ window.CAPSULES = [
     "sources": 0
   },
   {
-    "fichier": "capsules/07-discover-to-drop.html",
+    "fichier": "capsules/07-le-rag.html",
     "numero": 7,
-    "theme": "Usages et Méthodologie",
-    "titre": "Discover to Drop",
-    "accroche": "La livraison n'est plus une ligne droite mais une roue en six phases. Chaque passage est un contrat, vérifié sur preuves par une Quality Gate.",
+    "theme": "Les bases",
+    "titre": "Le RAG",
+    "accroche": "Avant de répondre, l'IA peut chercher dans vos documents. Le RAG réduit les inventions, à condition que la recherche trouve le bon passage.",
     "duree": "2 min",
-    "pages": 7,
+    "pages": 8,
     "formes": [
-      "libre",
-      "dessin",
+      "frise",
+      "pile",
       "pictos",
+      "barres",
+      "texte",
+      "barres",
       "dessin",
-      "libre",
-      "dessin",
-      "libre"
+      "pile"
     ],
-    "sources": 0
+    "sources": 8
   },
   {
     "fichier": "capsules/08-l-agent.html",
@@ -220,10 +221,9 @@ window.CAPSULES = [
     "titre": "Spec-Driven",
     "accroche": "Avec le Spec-Driven Development, l'effort passe du code à des spécifications claires, pour que l'IA livre le résultat attendu sans mauvaise surprise.",
     "duree": "2 min",
-    "pages": 6,
+    "pages": 5,
     "formes": [
       "texte",
-      "grille",
       "reseau",
       "frise",
       "texte",
@@ -251,23 +251,24 @@ window.CAPSULES = [
     "sources": 1
   },
   {
-    "fichier": "capsules/14-grille-de-spec.html",
+    "fichier": "capsules/14-evaluer-une-ia.html",
     "numero": 14,
     "theme": "Usages et Méthodologie",
-    "titre": "La grille de spec",
-    "accroche": "Avant le moindre code, des sous-agents IA passent la spec au crible, discipline par discipline. Aucune question ne reste sans réponse ni sans responsable.",
+    "titre": "Évaluer une IA",
+    "accroche": "« Ça a l'air bon » ne suffit pas. Un jeu de test, un critère mesurable et un juge calibré disent si l'IA fait vraiment bien son travail.",
     "duree": "2 min",
-    "pages": 7,
+    "pages": 8,
     "formes": [
-      "libre",
-      "pictos",
       "texte",
-      "dessin",
       "frise",
-      "libre",
-      "texte"
+      "pile",
+      "pictos",
+      "grille",
+      "barres",
+      "grille",
+      "reseau"
     ],
-    "sources": 0
+    "sources": 8
   },
   {
     "fichier": "capsules/15-secrets-et-prompts.html",
@@ -355,102 +356,100 @@ window.CAPSULES = [
     "numero": 19,
     "theme": "Gouvernance et Responsabilité",
     "titre": "Données et modèles",
-    "accroche": "Ce que vous pouvez confier à l'IA dépend d'abord de la sensibilité de vos données. Quatre classes fixent les modèles permis et qui approuve.",
+    "accroche": "Ce que vous confiez à l'IA dépend de la sensibilité de la donnée et de l'offre utilisée. Quatre réflexes pour ne pas le découvrir après coup.",
     "duree": "2 min",
     "pages": 8,
     "formes": [
       "libre",
-      "entonnoir",
+      "grille",
+      "barres",
       "pictos",
+      "texte",
+      "grille",
       "libre",
-      "dessin",
-      "libre",
-      "frise",
-      "texte"
+      "frise"
     ],
-    "sources": 0
+    "sources": 7
   },
   {
     "fichier": "capsules/20-niveaux-de-delegation.html",
     "numero": 20,
     "theme": "Gouvernance et Responsabilité",
     "titre": "La délégation",
-    "accroche": "Confier une tâche à l'IA ne dit pas qui en répond. Quatre niveaux le précisent, activité par activité, de Human à AI-autonomous.",
+    "accroche": "Confier une tâche à l'IA, c'est choisir votre rôle : diriger, valider ou surveiller. Plus l'agent est autonome, plus ce choix compte.",
     "duree": "2 min",
-    "pages": 9,
+    "pages": 8,
     "formes": [
-      "dessin",
+      "texte",
       "libre",
-      "dessin",
-      "pictos",
+      "frise",
       "grille",
-      "libre",
-      "dessin",
       "barres",
-      "frise"
+      "grille",
+      "barres",
+      "pictos"
     ],
-    "sources": 0
+    "sources": 8
   },
   {
     "fichier": "capsules/21-reversibilite.html",
     "numero": 21,
     "theme": "Gouvernance et Responsabilité",
     "titre": "La réversibilité",
-    "accroche": "Et si l'accès aux modèles américains était coupé demain ? Être réversible, c'est pouvoir basculer chaque tâche vers une alternative déjà testée.",
+    "accroche": "Un modèle d'IA peut être retiré, renchéri ou modifié sans vous demander votre avis. Être réversible, c'est pouvoir basculer vers une alternative testée.",
     "duree": "2 min",
-    "pages": 7,
+    "pages": 8,
     "formes": [
       "libre",
+      "pile",
+      "frise",
+      "barres",
       "texte",
-      "libre",
-      "pictos",
-      "dessin",
-      "libre",
-      "texte"
+      "barres",
+      "reseau",
+      "pictos"
     ],
-    "sources": 0
+    "sources": 6
   },
   {
     "fichier": "capsules/22-invariants-humains.html",
     "numero": 22,
     "theme": "Gouvernance et Responsabilité",
-    "titre": "Les invariants humains",
-    "accroche": "Les agents IA gagnent en autonomie, mais ne portent jamais la responsabilité d'une erreur. Six décisions restent pour toujours entre les mains des équipes.",
+    "titre": "Le dernier mot",
+    "accroche": "L'IA prépare, propose et exécute. Mais la loi comme les tribunaux demandent un humain derrière la décision.",
     "duree": "2 min",
-    "pages": 9,
+    "pages": 8,
     "formes": [
-      "libre",
-      "entonnoir",
-      "libre",
+      "barres",
       "pictos",
-      "dessin",
-      "libre",
+      "frise",
+      "pictos",
       "texte",
-      "libre",
+      "grille",
+      "barres",
       "dessin"
     ],
-    "sources": 0
+    "sources": 6
   },
   {
-    "fichier": "capsules/23-nouvelles-responsabilites.html",
+    "fichier": "capsules/23-injection-de-prompt.html",
     "numero": 23,
     "theme": "Gouvernance et Responsabilité",
-    "titre": "Nouvelles responsabilités",
-    "accroche": "L'IA ne crée pas de nouvelles équipes, mais de nouvelles responsabilités : onze rôles, portés à temps partiel par des profils qui existent déjà.",
+    "titre": "L'injection de prompt",
+    "accroche": "Un e-mail, une page web ou un ticket que l'IA lit peut contenir des ordres cachés. Savoir pourquoi permet de limiter les dégâts.",
     "duree": "2 min",
-    "pages": 9,
+    "pages": 8,
     "formes": [
-      "libre",
-      "barres",
-      "libre",
-      "pile",
-      "libre",
-      "reseau",
-      "libre",
+      "texte",
       "pictos",
-      "frise"
+      "texte",
+      "pile",
+      "frise",
+      "barres",
+      "reseau",
+      "pictos"
     ],
-    "sources": 0
+    "sources": 8
   },
   {
     "fichier": "capsules/24-bilan.html",

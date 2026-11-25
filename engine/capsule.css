@@ -21,12 +21,12 @@ body { font-family: var(--body); font-size: 16px; -webkit-font-smoothing: antial
   padding-right: max(16px, env(safe-area-inset-right, 0px));
   font-family: var(--mono); font-size: 11px; letter-spacing: .12em; text-transform: uppercase;
   color: var(--muted);
-  background: linear-gradient(var(--ink), rgba(5, 0, 38, 0));
+  background: linear-gradient(var(--ink), rgba(18, 18, 18, 0));
 }
 .topbar b { color: var(--paper); font-weight: 600; }
 .topbar a { color: var(--muted); text-decoration: none; }
 .topbar a:hover, .topbar a:focus-visible { color: var(--paper); }
-.topbar .count { font-variant-numeric: tabular-nums; color: var(--accent); }
+.topbar .count { font-variant-numeric: tabular-nums; color: var(--accent-hi); }
 .progress { position: fixed; left: 0; right: 0; bottom: 0; z-index: 5; height: 3px; background: var(--line); }
 .progress i { display: block; height: 100%; width: 0; background: var(--accent); }
 
@@ -46,7 +46,7 @@ main {
 .step.hero .card { max-width: 37rem; }
 .step:not(.is-active) .card { opacity: .3; transform: translateY(10px); }
 @media (prefers-reduced-motion: reduce) { .card { transition: opacity .2s; } .step:not(.is-active) .card { transform: none; } }
-.kicker { font-family: var(--mono); font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--accent); }
+.kicker { font-family: var(--mono); font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--accent-hi); }
 h1 {
   margin: 0; font-family: var(--display); font-weight: 900;
   font-size: clamp(60px, 11vw, 156px); line-height: .9; letter-spacing: -.04em;
@@ -68,7 +68,7 @@ a:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
 .hint { font-family: var(--mono); font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
 .takeaways { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 14px; counter-reset: t; }
 .takeaways li { display: grid; grid-template-columns: 28px 1fr; gap: 10px; font-size: 17px; line-height: 1.45; counter-increment: t; }
-.takeaways li::before { content: counter(t); font-family: var(--mono); font-weight: 600; color: var(--accent); }
+.takeaways li::before { content: counter(t); font-family: var(--mono); font-weight: 700; color: var(--accent-hi); }
 .takeaways b { font-weight: 500; color: var(--paper); }
 .sources { display: flex; flex-direction: column; gap: 6px; padding-top: 12px; border-top: 1px solid var(--line); }
 

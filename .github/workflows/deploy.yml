@@ -49,13 +49,13 @@ jobs:
             --short \
             --remember 30 \
             --template-title "Capsules IA" \
-            --template-instructions "Ces capsules sont réservées aux équipes du programme." \
+            --template-instructions "Ces capsules sont réservées aux personnes invitées." \
             --template-placeholder "Mot de passe" \
             --template-button "Ouvrir" \
             --template-remember "Se souvenir de moi (30 jours)" \
             --template-error "Mot de passe incorrect" \
-            --template-color-primary "#C9A96E" \
-            --template-color-secondary "#14123A"
+            --template-color-primary "#DF2147" \
+            --template-color-secondary "#1E1E1E"
           # Garde-fou : aucune page ne doit partir en clair.
           if grep -L "staticrypt" $(find _enc -name "*.html") | grep .; then
             echo "::error::Ces pages ne sont pas chiffrées."

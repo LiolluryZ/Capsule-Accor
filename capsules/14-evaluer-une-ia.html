@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Évaluer une IA · Capsule IA 14</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap">
+<link rel="stylesheet" href="../engine/capsule.css">
+</head>
+<body>
+<script>
+window.CAPSULE = {
+  numero: 14,
+  theme: "Usages et Méthodologie",
+  titre: "Évaluer une IA",
+  duree: "2 min",
+  accroche: "« Ça a l'air bon » ne suffit pas. Un jeu de test, un critère mesurable et un juge calibré disent si l'IA fait vraiment bien son travail.",
+  pages: [
+    {
+      forme: { type: "texte", segments: ["AU", "FEELING"], accent: "tout" },
+      kicker: "Le piège",
+      titre: "« Ça a l'air de marcher » n'est pas une évaluation",
+      texte: "Parmi les anti-patterns listés par OpenAI : juger « au feeling » et attendre d'avoir livré pour évaluer. Sans mesure, vous ne saurez pas si votre dernier changement a amélioré ou dégradé le résultat.",
+      source: { label: "OpenAI · Evaluation best practices", url: "https://developers.openai.com/api/docs/guides/evaluation-best-practices" }
+    },
+    {
+      forme: { type: "frise", jalons: 6, accent: [4] },
+      kicker: "La méthode", chiffre: "6",
+      titre: "étapes : les cas de test précèdent le prompt",
+      texte: "Anthropic décrit la boucle : cas de test d'abord, cas limites compris, puis prompt, essais, corrections, et enfin évaluation sur un jeu tenu à part avant de livrer. Chaque critère de réussite doit être spécifique et mesurable.",
+      source: { label: "Anthropic · Define success criteria and build evaluations", url: "https://platform.claude.com/docs/en/test-and-evaluate/develop-tests" }
+    },
+    {
+      forme: { type: "pile", feuilles: 18, accent: "tous-les-6" },
+      kicker: "Vos données",
+      titre: "Le jeu de test doit ressembler à ce que vos utilisateurs envoient",
+      texte: "Un jeu de test qui ne reflète pas le trafic réel fausse la mesure. Mêlez cas courants, cas limites et cas piégés, et puisez dans vos journaux d'usage pour l'enrichir au fil du temps.",
+      source: { label: "OpenAI · Evaluation best practices", url: "https://developers.openai.com/api/docs/guides/evaluation-best-practices" }
+    },
+    {
+      forme: { type: "pictos", icones: ["engrenage", "personne", "bulle"], accent: [2] },
+      kicker: "Les juges",
+      titre: "Trois façons de noter : un programme, une personne, une IA",
+      texte: "Un programme est le plus rapide et le plus fiable, mais sans nuance. Une personne est la plus fine, mais lente et chère. Une IA juge les cas complexes à grande échelle : testez d'abord sa fiabilité.",
+      source: { label: "Anthropic · Define success criteria and build evaluations", url: "https://platform.claude.com/docs/en/test-and-evaluate/develop-tests" }
+    },
+    {
+      forme: { type: "grille", cols: 10, rows: 10, accent: 80 },
+      kicker: "Le juge IA", chiffre: "> 80 %",
+      titre: "d'accord entre un juge GPT-4 et des humains, comme entre humains",
+      texte: "Dans l'étude qui a popularisé l'IA-juge, GPT-4 rejoint les préférences humaines à plus de 80 %, le niveau d'accord entre deux personnes. Noter à grande échelle devient abordable, à condition d'en connaître les défauts.",
+      source: { label: "Zheng et al. · Judging LLM-as-a-Judge (2023)", url: "https://arxiv.org/abs/2306.05685" }
+    },
+    {
+      forme: { type: "barres", valeurs: [65, 35], accent: [1] },
+      kicker: "Les biais", chiffre: "65 %",
+      titre: "de verdicts identiques quand on inverse l'ordre des réponses",
+      texte: "Sur des réponses très proches, GPT-4 reste cohérent dans 65 % des cas : les juges favorisent aussi les textes longs et leurs propres écrits. Notez dans les deux ordres et ne gardez que les verdicts stables.",
+      source: { label: "Zheng et al. · Judging LLM-as-a-Judge (2023)", url: "https://arxiv.org/abs/2306.05685" }
+    },
+    {
+      forme: { type: "grille", cols: 10, rows: 10, accent: 51 },
+      kicker: "La régression", chiffre: "51 %",
+      titre: "de réussite en juin 2023, contre 84 % en mars pour GPT-4",
+      texte: "Même tâche (distinguer nombres premiers et composés), même service : trois mois ont suffi pour que les résultats chutent. Un fournisseur peut modifier un modèle, donc rejouez votre jeu de test à chaque mise à jour.",
+      source: { label: "Chen et al. · How is ChatGPT's behavior changing?", url: "https://arxiv.org/abs/2307.09009" }
+    },
+    {
+      forme: { type: "reseau", noeuds: 4, accent: [0, 1, 2, 3], centre: false },
+      kicker: "La boucle",
+      titre: "Chaque changement se rejoue sur le même jeu de test",
+      texte: "Évaluez tôt et souvent, gardez une trace de tout, et faites relire un échantillon par une personne pour calibrer le juge automatique. Prompt, modèle ou outil modifié : on rejoue avant de déployer.",
+      source: { label: "OpenAI · Evaluation best practices", url: "https://developers.openai.com/api/docs/guides/evaluation-best-practices" }
+    }
+  ],
+  aRetenir: {
+    titre: "Quatre réflexes",
+    points: [
+      "<b>Mesurez avant de livrer.</b> Fixez un critère chiffré et un jeu de test avant le premier prompt.",
+      "<b>Partez de vos cas réels.</b> Vos échanges et leurs cas limites valent mieux qu'un benchmark générique.",
+      "<b>Calibrez votre juge.</b> Faites relire un échantillon par une personne et notez dans les deux ordres.",
+      "<b>Rejouez à chaque changement.</b> Nouveau prompt, nouveau modèle ou mise à jour du fournisseur : même jeu de test."
+    ]
+  }
+};
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="../engine/capsule.js"></script>
+</body>
+</html>

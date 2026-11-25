@@ -19,7 +19,7 @@ Structure imposée par le moteur :
 ### 1. Cadrer
 Fixe le titre (idéalement 1 à 3 mots), le thème, le numéro et l'angle en une phrase.
 - **Thème** : lis `capsules/manifest.js` et reprends un thème existant quand il convient, pour que les filtres de l'index restent courts. Sinon crée-en un.
-- **Numéro** : c'est le jour de la porte du calendrier « Avent IA4D » (écrire toujours « Avent IA4D », jamais « AventIA »). Les capsules sont ordonnées par difficulté croissante, du concept le plus simple au plus complexe : place la nouvelle à son rang et décale les suivantes si besoin (renommer les fichiers, mettre à jour `numero` et le titre, puis `node tools/manifest.mjs`). Contraintes : Le Nexus (06) passe avant Discover to Drop (07), partagée le 7 décembre.
+- **Numéro** : c'est le jour de la porte du calendrier « Avent IA ». Les capsules sont ordonnées par difficulté croissante, du concept le plus simple au plus complexe : place la nouvelle à son rang et décale les suivantes si besoin (renommer les fichiers, mettre à jour `numero` et le titre, puis `node tools/manifest.mjs`).
 - Si l'utilisateur donne seulement un sujet, choisis toi-même l'angle et le thème, puis annonce-les dans le compte rendu.
 
 ### 2. Collecter les faits
@@ -63,7 +63,7 @@ Donne à l'utilisateur :
 - les faits datés à revérifier avant diffusion, avec leur date de vérification ;
 - comment ouvrir : `open index.html` ou le fichier de la capsule.
 
-La palette reprend la charte Accor : la capsule reste un fichier local. Publie-la en ligne seulement si l'utilisateur le demande explicitement.
+La palette reprend la charte Zenika (`engine/tokens.css`) : la capsule reste un fichier local. Publie-la en ligne seulement si l'utilisateur le demande explicitement.
 
 ## Modifier une capsule existante
 Modifie le fichier de la capsule, puis refais les étapes 5 et 6. Le moteur ne change que si aucune forme existante ne peut montrer un fait. Dans ce cas, ajoute la forme dans `engine/capsule.js`, ajoute une page de démonstration dans `engine/catalogue.html`, documente-la dans [references/formes.md](references/formes.md), puis vérifie avec `node tools/check.mjs engine/catalogue.html`.
