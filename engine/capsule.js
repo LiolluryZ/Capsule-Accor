@@ -96,6 +96,53 @@
       }
       return total - 1;
     }
+    // Feu d'artifice : une page peut le demander avec `feuDArtifice: true`. Il part quand la page
+    // devient active (fusées dorées et lavande, ~6 s), derrière la carte de texte. Ignoré si l'utilisateur
+    // préfère moins d'animations.
+    const fireworks = (() => {
+      let cv, g, W, H, rockets = [], sparks = [], running = false, until = 0, next = 0;
+      const css = getComputedStyle(document.documentElement);
+      const cols = ["--accent", "--accent-hi", "--paper", "--particle"].map(v => css.getPropertyValue(v).trim() || "#D1AD78");
+      const size = () => { const d = Math.min(devicePixelRatio, 2); W = innerWidth; H = innerHeight; cv.width = W * d; cv.height = H * d; g.setTransform(d, 0, 0, d, 0, 0); };
+      const launch = () => rockets.push({ x: W * (.15 + Math.random() * .7), y: H, vy: -(H * (.016 + Math.random() * .006)), top: H * (.15 + Math.random() * .35), c: cols[(Math.random() * 2) | 0] });
+      const explode = r => {
+        const n = 70 + (Math.random() * 40 | 0), c2 = cols[(Math.random() * cols.length) | 0];
+        for (let i = 0; i < n; i++) { const a = Math.random() * 6.283, v = 1.5 + Math.random() * 4.5; sparks.push({ x: r.x, y: r.y, vx: Math.cos(a) * v, vy: Math.sin(a) * v, life: 1, d: .008 + Math.random() * .012, c: Math.random() < .6 ? r.c : c2, r: .8 + Math.random() * 1.6 }); }
+      };
+      function loop(t) {
+        if (!running) return;
+        g.clearRect(0, 0, W, H);
+        if (t < until && t > next) { launch(); next = t + 250 + Math.random() * 450; }
+        rockets = rockets.filter(r => {
+          r.y += r.vy; r.vy *= .985;
+          g.globalAlpha = .9; g.fillStyle = r.c; g.beginPath(); g.arc(r.x, r.y, 1.8, 0, 6.283); g.fill();
+          if (r.y <= r.top || Math.abs(r.vy) < 2) { explode(r); return false; }
+          return true;
+        });
+        sparks = sparks.filter(p => {
+          p.vx *= .975; p.vy = p.vy * .975 + .05; p.x += p.vx; p.y += p.vy; p.life -= p.d;
+          if (p.life <= 0) return false;
+          g.globalAlpha = p.life; g.fillStyle = p.c; g.beginPath(); g.arc(p.x, p.y, p.r, 0, 6.283); g.fill();
+          return true;
+        });
+        if (t < until || rockets.length || sparks.length) requestAnimationFrame(loop);
+        else { running = false; g.clearRect(0, 0, W, H); }
+      }
+      return {
+        start() {
+          if (reduce) return;
+          if (!cv) {
+            cv = document.createElement("canvas"); cv.setAttribute("aria-hidden", "true");
+            cv.style.cssText = "position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:1";
+            document.body.appendChild(cv); g = cv.getContext("2d"); size(); addEventListener("resize", size);
+          }
+          const now = performance.now(); until = now + 6000; next = now + 300;
+          if (!running) { running = true; requestAnimationFrame(loop); }
+        },
+        stop() { until = 0; rockets = []; sparks = []; }
+      };
+    })();
+
     let activeIdx = -1;
     function updateChrome(p) {
       const idx = Math.round(p);
@@ -104,6 +151,7 @@
       if (idx !== activeIdx) {
         stepsEl.forEach((el, k) => el.classList.toggle("is-active", k === idx));
         activeIdx = idx;
+        if (steps[idx].feuDArtifice) fireworks.start(); else fireworks.stop();
       }
     }
     updateChrome(scrollProgress());

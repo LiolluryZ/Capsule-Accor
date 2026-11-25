@@ -125,3 +125,6 @@ Une forme calculée en JavaScript, particule par particule.
 | un mot, un sigle, un chiffre emblématique, une inégalité | texte |
 | un objet ou un schéma propre au sujet, absent du catalogue | dessin |
 | une géométrie, une 3D, un phénomène qu'aucune forme ne rend | libre |
+
+## Feu d'artifice (effet de page)
+Ajoute `feuDArtifice: true` à une page (à côté de `forme`, `kicker`…) pour lancer des fusées dorées et lavande pendant environ 6 secondes quand elle devient active. L'effet passe derrière la carte de texte et est ignoré si le lecteur préfère moins d'animations. À réserver à une page de célébration (la dernière capsule du calendrier, par exemple).

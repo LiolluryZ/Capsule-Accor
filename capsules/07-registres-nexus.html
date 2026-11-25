@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Le Nexus · Capsule IA 05</title>
+<title>Le Nexus · Capsule IA 07</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Red+Hat+Display:wght@500;700;900&display=swap">
@@ -12,11 +12,11 @@
 <body>
 <script>
 window.CAPSULE = {
-  numero: 5,
+  numero: 7,
   theme: "Usages et Méthodologie",
   titre: "Le Nexus",
-  duree: "3 min",
-  accroche: "L'IA ne connaît que ce que vous lui montrez. Le Context Nexus range le savoir de l'équipe en quatre registres, mis à jour par vos gestes du quotidien.",
+  duree: "2 min",
+  accroche: "L'IA ne connaît que ce que vous lui montrez. Le Context Nexus est la mémoire commune de l'équipe : un seul endroit où ranger ce qu'elle sait, veut, exige et fait.",
   pages: [
     {
       forme: { type: "reseau", noeuds: 4, accent: [0, 1, 2, 3, 4], centre: true },
@@ -45,14 +45,8 @@ window.CAPSULE = {
     {
       forme: { type: "pile", feuilles: 20, accent: "tous-les-6" },
       kicker: "La comparaison",
-      titre: "Du wiki oublié aux fichiers Git relus avant chaque action",
-      texte: "Un wiki séparé du code s'endort vite. Versionné dans les dépôts GitLab de l'équipe, le contexte est relu en continu par les agents IA et la chaîne d'intégration (CI/CD) : un livrable partagé et auditable."
-    },
-    {
-      forme: { type: "frise", jalons: 7, accent: [0, 1, 2, 3, 4, 5, 6] },
-      kicker: "Ordre de grandeur", chiffre: "7",
-      titre: "moments de la semaine suffisent à garder le Nexus à jour",
-      texte: "ADR votée, ticket créé, merge request fusionnée, contrôle qualité échoué, incident résolu, revue de sprint, revue d'architecture. À chaque geste son registre : aucune réunion ni outil en plus."
+      titre: "Du wiki oublié au contexte relu avant chaque action",
+      texte: "Un wiki à part s'endort vite. Rangé avec le travail de l'équipe, le contexte est relu en continu par les agents IA : il reste vivant, partagé et traçable."
     },
     {
       forme: { type: "libre", fn: (i, n, o) => {
@@ -66,54 +60,20 @@ window.CAPSULE = {
       } },
       kicker: "La décision", chiffre: "1 → 2",
       titre: "Une décision donne deux écrits : le pourquoi et la consigne",
-      texte: "Une ADR (décision d'architecture) garde le débat dans Knowledge, pour l'équipe. L'agent reçoit dans Purpose une seule règle applicable : « Les échanges entre services passent par la solution retenue. » Exemple illustratif."
-    },
-    {
-      forme: { type: "barres", valeurs: [200, 340], accent: [1] },
-      kicker: "Contrôle échoué", chiffre: "340 ms",
-      titre: "mesurés pour 200 exigés : un signal, pas un reproche",
-      texte: "Quand un contrôle automatique bloque, le responsable du registre Contracts est alerté. L'équipe tranche : seuil irréaliste ou code à reprendre ? Le contrat ou le livrable est corrigé. Les chiffres ci-contre sont illustratifs."
-    },
-    {
-      forme: { type: "reseau", noeuds: 4, accent: [0, 1, 2], centre: true },
-      kicker: "Incident résolu", chiffre: "1 → 2",
-      titre: "Un incident résolu enrichit deux registres d'un coup",
-      texte: "Le post-mortem complète le guide de dépannage dans Process et consigne le piège technique dans Knowledge. Vos collègues comme vos assistants IA sauront éviter ou traiter la même panne la fois suivante."
-    },
-    {
-      forme: { type: "dessin", vue: [60, 80], accent: [1], trait: 0, chemins: [
-        "M8 4 h44 l-22 34 z",
-        "M30 42 l22 34 h-44 z"
-      ] },
-      kicker: "La péremption",
-      titre: "Périmée, une directive sort du contexte des agents sans être effacée",
-      texte: "Chaque élément partagé porte un propriétaire et une date de dernière validation. Passé un seuil, il est signalé et retiré des consignes et de la recherche, jusqu'à ce qu'un responsable le revalide."
+      texte: "Le débat reste dans Knowledge, pour l'équipe. L'agent reçoit dans Purpose une seule règle applicable, par exemple : « Tous les échanges passent par la solution retenue. » Exemple illustratif."
     },
     {
       forme: { type: "barres", valeurs: [1, 1, 1, 1], accent: [1, 2] },
       kicker: "Les rôles", chiffre: "2 sur 4",
       titre: "registres restent aux humains : l'intention et l'exigence",
       texte: "Vous fixez ce que l'on veut (Purpose) et ce que l'on exige (Contracts). L'agent observe, se corrige et exécute dans Process, sans jamais écrire les règles. Votre regard garantit qu'il résout le vrai problème."
-    },
-    {
-      forme: { type: "texte", segments: ["ORAL"], accent: "tout" },
-      kicker: "Le piège",
-      titre: "Une leçon qui ne change rien dans Git est perdue pour l'IA",
-      texte: "Un signal de production n'est appris que s'il produit une modification dans Git ou un ticket. Un problème débattu à l'oral reste invisible : au sprint suivant, l'assistant refait la même erreur."
-    },
-    {
-      forme: { type: "frise", jalons: 3, accent: [0, 1, 2] },
-      kicker: "En pratique", chiffre: "0",
-      titre: "nouvelle réunion pour faire de la doc",
-      texte: "Planification, daily et revue de sprint restent les mêmes. Au lieu de rédiger des comptes-rendus, vous y arbitrez les seuls écarts signalés par les contrôles automatiques : moins de réunions, des agents à jour."
     }
   ],
   aRetenir: {
-    titre: "Quatre réflexes",
+    titre: "Trois réflexes",
     points: [
       "<b>Écrivez vos conventions.</b> Tout ce qui reste implicite ou oral est ignoré par les assistants.",
       "<b>Séparez le pourquoi de la consigne.</b> À chaque décision, la mémoire va à vos collègues, la règle courte à l'IA.",
-      "<b>Actualisez à chaud.</b> Merge, arbitrage ou fin d'incident : mettez le registre à jour sur le moment, avec un propriétaire et une date.",
       "<b>Gardez la main sur Purpose et Contracts.</b> L'IA applique, l'équipe fixe l'intention et l'exigence."
     ]
   }
