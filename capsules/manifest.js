@@ -97,27 +97,8 @@ window.CAPSULES = [
     "sources": 5
   },
   {
-    "fichier": "capsules/06-l-agent.html",
+    "fichier": "capsules/06-registres-nexus.html",
     "numero": 6,
-    "theme": "Les bases",
-    "titre": "L'agent",
-    "accroche": "Un assistant répond, un agent agit. Il enchaîne seul les actions avec vos outils : plus puissant, plus coûteux, et à encadrer.",
-    "duree": "2 min",
-    "pages": 7,
-    "formes": [
-      "libre",
-      "texte",
-      "barres",
-      "frise",
-      "dessin",
-      "grille",
-      "pictos"
-    ],
-    "sources": 7
-  },
-  {
-    "fichier": "capsules/07-registres-nexus.html",
-    "numero": 7,
     "theme": "Usages et Méthodologie",
     "titre": "Le Nexus",
     "accroche": "L'IA ne connaît que ce que vous lui montrez. Le Context Nexus est la mémoire commune de l'équipe : un seul endroit où ranger ce qu'elle sait, veut, exige et fait.",
@@ -135,8 +116,8 @@ window.CAPSULES = [
     "sources": 0
   },
   {
-    "fichier": "capsules/08-discover-to-drop.html",
-    "numero": 8,
+    "fichier": "capsules/07-discover-to-drop.html",
+    "numero": 7,
     "theme": "Usages et Méthodologie",
     "titre": "Discover to Drop",
     "accroche": "La livraison n'est plus une ligne droite mais une roue en six phases. Chaque passage est un contrat, vérifié sur preuves par une Quality Gate.",
@@ -152,6 +133,25 @@ window.CAPSULES = [
       "libre"
     ],
     "sources": 0
+  },
+  {
+    "fichier": "capsules/08-l-agent.html",
+    "numero": 8,
+    "theme": "Les bases",
+    "titre": "L'agent",
+    "accroche": "Un assistant répond, un agent agit. Il enchaîne seul les actions avec vos outils : plus puissant, plus coûteux, et à encadrer.",
+    "duree": "2 min",
+    "pages": 7,
+    "formes": [
+      "libre",
+      "texte",
+      "barres",
+      "frise",
+      "dessin",
+      "grille",
+      "pictos"
+    ],
+    "sources": 7
   },
   {
     "fichier": "capsules/09-cout-des-tokens.html",
