@@ -225,8 +225,8 @@ window.CAPSULES = [
       "texte",
       "reseau",
       "frise",
-      "frise",
-      "frise",
+      "pile",
+      "reseau",
       "pictos",
       "texte",
       "texte"
