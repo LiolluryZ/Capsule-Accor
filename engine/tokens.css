@@ -12,7 +12,7 @@
   --faint: #8E8E98;        /* légendes, sources */
   --particle: #9A9AA8;     /* particules au repos : gris froid */
   --accent: #DF2147;       /* rouge Zenika : le fait qui compte */
-  --accent-hi: #FF5C7C;    /* rouge clair : petits textes (contraste AA) et lueurs */
+  --accent-hi: #F2304F;    /* rouge vif : petits textes (contraste AA, 4,7:1 sur le noir) et lueurs */
   --line: rgba(255, 255, 255, .12);
   --display: "Nunito", system-ui, sans-serif;
   --body: "Nunito", "Helvetica Neue", Arial, sans-serif;
