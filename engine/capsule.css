@@ -83,3 +83,7 @@ a:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
   .topbar .serie { display: none; }
   .body { font-size: 16px; }
 }
+
+/* Monogramme Zenika dans la barre du haut */
+.topbar .brand { display: inline-flex; align-items: center; gap: 12px; }
+.topbar .brand img { display: block; width: 22px; height: 22px; }

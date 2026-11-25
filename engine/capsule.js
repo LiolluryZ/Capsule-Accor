@@ -19,6 +19,7 @@
   const pad = n => String(n).padStart(2, "0");
   const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
   const indexHref = C.index || "../index.html";
+  const ENGINE = document.currentScript ? new URL(".", document.currentScript.src).href : "../engine/";
 
   // ---------- Étapes : ouverture + pages + à retenir ----------
   const steps = [
@@ -53,7 +54,7 @@
   document.body.insertAdjacentHTML("afterbegin", `
     <canvas id="stage" aria-hidden="true"></canvas>
     <header class="topbar">
-      <span><a href="${esc(indexHref)}">← Capsules</a> · <b>n°${pad(C.numero)}</b> <span class="serie">· ${esc(C.theme || "")}</span></span>
+      <span class="brand"><img src="${ENGINE}img/zenika-monogramme.svg" alt="Zenika" height="22" width="22"><a href="${esc(indexHref)}">← Capsules</a> · <b>n°${pad(C.numero)}</b> <span class="serie">· ${esc(C.theme || "")}</span></span>
       <span><b>${esc(C.titre)}</b> · <span class="count" id="tb-count"></span></span>
     </header>
     <main id="steps">${stepsHTML}</main>
