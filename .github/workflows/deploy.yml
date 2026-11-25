@@ -1,8 +1,13 @@
 name: Publier les capsules
 
+# Un seul site GitHub Pages, deux versions chiffrées :
+#   /        branche main    (version Accor, mot de passe STATICRYPT_PASSWORD)
+#   /zenika/ branche zenika  (version Zenika, mot de passe STATICRYPT_PASSWORD_ZENIKA)
+# Chaque publication reconstruit les deux, car un déploiement Pages remplace tout le site.
+# Ce fichier doit rester identique sur main et sur zenika.
 on:
   push:
-    branches: [main]
+    branches: [main, zenika]
   workflow_dispatch:
 
 permissions:
@@ -19,52 +24,70 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: main
+          path: src-main
+
+      - uses: actions/checkout@v4
+        with:
+          ref: zenika
+          path: src-zenika
 
       - uses: actions/setup-node@v4
         with:
           node-version: 20
 
-      - name: Vérifier le mot de passe
+      - name: Vérifier les mots de passe
         env:
-          STATICRYPT_PASSWORD: ${{ secrets.STATICRYPT_PASSWORD }}
+          PW_MAIN: ${{ secrets.STATICRYPT_PASSWORD }}
+          PW_ZENIKA: ${{ secrets.STATICRYPT_PASSWORD_ZENIKA }}
         run: |
-          if [ -z "$STATICRYPT_PASSWORD" ]; then
-            echo "::error::Secret STATICRYPT_PASSWORD absent : rien n'est publié."
+          if [ -z "$PW_MAIN" ] || [ -z "$PW_ZENIKA" ]; then
+            echo "::error::Secret STATICRYPT_PASSWORD ou STATICRYPT_PASSWORD_ZENIKA absent : rien n'est publié."
             exit 1
           fi
 
-      - name: Régénérer le manifeste
-        run: node tools/manifest.mjs
-
-      - name: Préparer le site
-        run: node tools/build-site.mjs
-
-      - name: Chiffrer chaque page HTML
+      - name: Construire et chiffrer les deux versions
         env:
-          STATICRYPT_PASSWORD: ${{ secrets.STATICRYPT_PASSWORD }}
+          PW_MAIN: ${{ secrets.STATICRYPT_PASSWORD }}
+          PW_ZENIKA: ${{ secrets.STATICRYPT_PASSWORD_ZENIKA }}
         run: |
-          npx --yes staticrypt@3.5.4 _site -r -d _enc \
-            --salt 30eb966ff1dcc83ce899f2980e37d1b8 \
-            --config false \
-            --short \
-            --remember 30 \
-            --template-title "Capsules IA" \
-            --template-instructions "Ces capsules sont réservées aux personnes invitées." \
-            --template-placeholder "Mot de passe" \
-            --template-button "Ouvrir" \
-            --template-remember "Se souvenir de moi (30 jours)" \
-            --template-error "Mot de passe incorrect" \
-            --template-color-primary "#DF2147" \
-            --template-color-secondary "#1E1E1E"
+          set -euo pipefail
+          ROOT="$PWD"
+          # build <nom> <mot de passe> <couleur principale> <couleur secondaire> <consigne>
+          build() {
+            mkdir -p "$ROOT/raw/$1"
+            (cd "src-$1" && node tools/manifest.mjs && node tools/build-site.mjs "$ROOT/raw/$1/site")
+            STATICRYPT_PASSWORD="$2" npx --yes staticrypt@3.5.4 "raw/$1/site" -r -d "enc/$1" \
+              --salt 30eb966ff1dcc83ce899f2980e37d1b8 \
+              --config false \
+              --short \
+              --remember 30 \
+              --template-title "Capsules IA" \
+              --template-instructions "$5" \
+              --template-placeholder "Mot de passe" \
+              --template-button "Ouvrir" \
+              --template-remember "Se souvenir de moi (30 jours)" \
+              --template-error "Mot de passe incorrect" \
+              --template-color-primary "$3" \
+              --template-color-secondary "$4"
+          }
+          build main "$PW_MAIN" "#C9A96E" "#14123A" "Ces capsules sont réservées aux équipes du programme."
+          build zenika "$PW_ZENIKA" "#DF2147" "#1E1E1E" "Ces capsules sont réservées aux personnes invitées."
+
+          mkdir -p public/zenika
+          cp -R enc/main/site/. public/
+          cp -R enc/zenika/site/. public/zenika/
+
           # Garde-fou : aucune page ne doit partir en clair.
-          if grep -L "staticrypt" $(find _enc -name "*.html") | grep .; then
+          if grep -L "staticrypt" $(find public -name "*.html") | grep .; then
             echo "::error::Ces pages ne sont pas chiffrées."
             exit 1
           fi
 
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: _enc/_site
+          path: public
 
   deploy:
     needs: build
