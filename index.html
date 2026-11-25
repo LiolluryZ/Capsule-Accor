@@ -164,6 +164,12 @@ footer a { color: var(--muted); text-underline-offset: 3px; }
   .panel, .inside, .inside .n, .inside .arrow { transition: none; }
   .door.ready .panel, .door.shake, .door.opening .flash, .door.opening .inside, body.boom .wrap { animation: none; }
 }
+
+/* Easter egg : le Grinch vole une porte (Konami code ou triple clic sur « IA »). */
+.door.stolen { opacity: .16; transform: scale(.97); filter: grayscale(1); outline: 1px dashed #6FBF4A; outline-offset: -1px; cursor: pointer; transition: opacity .6s, transform .6s, filter .6s; }
+.door.stolen > * { pointer-events: none; }
+.door.stolen .panel { animation: none; }
+header.hero h1 span { cursor: default; user-select: none; }
 </style>
 </head>
 <body>
@@ -328,7 +334,10 @@ footer a { color: var(--muted); text-underline-offset: 3px; }
     }
     label(door); refresh();
   }
-  grid.addEventListener("click", e => { const p = e.target.closest(".panel"); if (p) openDoor(p.closest(".door")); });
+  grid.addEventListener("click", e => {
+    const st = e.target.closest(".door.stolen"); if (st) return rescue(st);
+    const p = e.target.closest(".panel"); if (p) openDoor(p.closest(".door"));
+  });
   grid.querySelectorAll(".door.open").forEach(d => d.classList.add("instant"));
   requestAnimationFrame(() => requestAnimationFrame(() => grid.querySelectorAll(".instant").forEach(d => d.classList.remove("instant"))));
 
@@ -338,6 +347,87 @@ footer a { color: var(--muted); text-underline-offset: 3px; }
     document.getElementById("closeAll").onclick = () => { opened.clear(); refresh(); };
   }
   refresh();
+
+  // ---------- Easter egg : le Grinch ----------
+  let grinchOn = false, gRunning = false, stolenTimer = 0;
+  const GREEN = "#7BC74D", GREEN_DARK = "#2E6B2B";
+  function faceCanvas() {
+    const S = 300, c = document.createElement("canvas"); c.width = c.height = S;
+    const g = c.getContext("2d"), E = (x, y, rx, ry, col, rot = 0) => { g.fillStyle = col; g.beginPath(); g.ellipse(x, y, rx, ry, rot, 0, 6.283); g.fill(); };
+    E(150, 165, 100, 118, GREEN);                                   // visage
+    E(60, 170, 14, 34, GREEN); E(240, 170, 14, 34, GREEN);          // oreilles
+    g.strokeStyle = GREEN_DARK; g.lineCap = "round"; g.lineWidth = 15;
+    g.beginPath(); g.moveTo(62, 92); g.lineTo(130, 124); g.moveTo(238, 92); g.lineTo(170, 124); g.stroke();   // sourcils en colère
+    E(105, 142, 27, 15, "#F2D13D", .25); E(195, 142, 27, 15, "#F2D13D", -.25);  // yeux jaunes
+    E(110, 143, 4.5, 13, "#B3261E"); E(190, 143, 4.5, 13, "#B3261E");           // pupilles
+    g.strokeStyle = GREEN_DARK; g.lineWidth = 6; g.beginPath(); g.moveTo(150, 150); g.quadraticCurveTo(160, 185, 148, 192); g.stroke();  // nez
+    g.fillStyle = "#8A1F26"; g.beginPath(); g.moveTo(66, 212); g.quadraticCurveTo(150, 300, 234, 212); g.quadraticCurveTo(150, 252, 66, 212); g.fill(); // sourire
+    g.fillStyle = "#F6F1D2"; g.beginPath(); g.moveTo(84, 219); g.quadraticCurveTo(150, 270, 216, 219); g.quadraticCurveTo(150, 250, 84, 219); g.fill();   // dents
+    g.strokeStyle = GREEN_DARK; g.lineWidth = 8; g.beginPath(); g.moveTo(66, 212); g.lineTo(52, 196); g.moveTo(234, 212); g.lineTo(248, 196); g.stroke();
+    return { g, S };
+  }
+  function facePoints() {
+    const { g, S } = faceCanvas(), d = g.getImageData(0, 0, S, S).data, pts = [];
+    for (let y = 0; y < S; y += 3) for (let x = 0; x < S; x += 3) { const i = (y * S + x) * 4; if (d[i + 3] > 128) pts.push({ tx: x - S / 2 + (Math.random() - .5) * 2.4, ty: y - S / 2 + (Math.random() - .5) * 2.4, c: `rgb(${d[i]},${d[i + 1]},${d[i + 2]})` }); }
+    return pts;
+  }
+  function steal(door, n) {
+    door.classList.add("stolen");
+    msg.innerHTML = `Le Grinch a volé la porte <b>${n}</b> ! Cliquez dessus pour la récupérer.`;
+    stolenTimer = setTimeout(() => { if (door.classList.contains("stolen")) rescue(door); }, 20000);
+  }
+  function rescue(door) {
+    clearTimeout(stolenTimer);
+    door.classList.remove("stolen"); grinchOn = false; gRunning = false;
+    const r = door.getBoundingClientRect();
+    if (!reduce) { burst(r.left + r.width / 2, r.top + r.height / 2); setTimeout(() => burst(r.left + r.width * .2, r.top + r.height * .3), 250); setTimeout(() => burst(r.left + r.width * .8, r.top + r.height * .6), 450); }
+    refresh();
+    msg.innerHTML = `Noël est sauvé ! La porte <b>${door.dataset.n}</b> est de retour.`;
+  }
+  function grinch() {
+    if (gRunning) return;
+    gRunning = true; grinchOn = true;
+    const doors = [...grid.querySelectorAll(".door")], door = doors[(Math.random() * doors.length) | 0], n = +door.dataset.n;
+    door.scrollIntoView({ block: "center", behavior: reduce ? "auto" : "smooth" });
+    if (reduce) return steal(door, n);
+    setTimeout(() => {
+      const gc = document.createElement("canvas"); gc.setAttribute("aria-hidden", "true");
+      gc.style.cssText = "position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:60";
+      document.body.appendChild(gc);
+      const g = gc.getContext("2d"), d = Math.min(devicePixelRatio, 2), VW = innerWidth, VH = innerHeight;
+      gc.width = VW * d; gc.height = VH * d; g.setTransform(d, 0, 0, d, 0, 0);
+      const pts = facePoints(), k0 = Math.max(.7, Math.min(1.15, Math.min(VW, VH) / 520));
+      const cx = VW / 2, cy = VH * .42, r = door.getBoundingClientRect(), dx = r.left + r.width / 2, dy = r.top + r.height / 2;
+      pts.forEach(p => { const a = Math.random() * 6.283, R = 350 + Math.random() * 500; p.sx = cx + Math.cos(a) * R; p.sy = cy + Math.sin(a) * R; p.vx = (Math.random() - .5) * 9; p.vy = -2 - Math.random() * 8; });
+      const ease = t => t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2, t0 = performance.now();
+      let said = false, stolen = false;
+      (function frame(now) {
+        const t = now - t0;
+        g.clearRect(0, 0, VW, VH);
+        let X = cx, Y = cy, K = k0, A = 1, form = 1;
+        if (t < 1500) form = ease(t / 1500);
+        if (t > 1500 && !said) { said = true; msg.innerHTML = `<b style="color:${GREEN}">Le Grinch</b> : « Noël ? Je vais le voler. »`; }
+        if (t > 3000 && t <= 4100) { const u = ease((t - 3000) / 1100); X = cx + (dx - cx) * u; Y = cy + (dy - cy) * u; K = k0 * (1 - .5 * u); }
+        if (t > 4100) { X = dx; Y = dy; K = k0 * .5; if (!stolen) { stolen = true; steal(door, n); } A = Math.max(0, 1 - (t - 4100) / 1000); }
+        for (const p of pts) {
+          let x, y;
+          if (t <= 4100) {
+            const tx = X + p.tx * K + (t > 1500 ? Math.sin(t * .006 + p.tx) * 1.2 : 0), ty = Y + p.ty * K + (t > 1500 ? Math.cos(t * .005 + p.ty) * 1.2 : 0);
+            x = p.sx + (tx - p.sx) * form; y = p.sy + (ty - p.sy) * form;
+          } else { const u = (t - 4100) / 16; x = X + p.tx * K + p.vx * u; y = Y + p.ty * K + p.vy * u + u * u * .02; }
+          g.globalAlpha = A * (.35 + .65 * form); g.fillStyle = p.c;
+          g.beginPath(); g.arc(x, y, 1.5, 0, 6.283); g.fill();
+        }
+        if (t < 5200) requestAnimationFrame(frame); else gc.remove();
+      })(t0);
+    }, 700);
+  }
+  // Déclencheurs : Konami code, ou trois clics rapides sur « IA » dans le titre.
+  const KONAMI = ["ArrowUp", "ArrowUp", "ArrowDown", "ArrowDown", "ArrowLeft", "ArrowRight", "ArrowLeft", "ArrowRight", "b", "a"];
+  let ki = 0;
+  addEventListener("keydown", e => { ki = e.key === KONAMI[ki] ? ki + 1 : (e.key === KONAMI[0] ? 1 : 0); if (ki === KONAMI.length) { ki = 0; grinch(); } });
+  let clicks = [];
+  document.querySelector("header.hero h1 span").addEventListener("click", () => { const now = Date.now(); clicks = clicks.filter(t => now - t < 900).concat(now); if (clicks.length >= 3) { clicks = []; grinch(); } });
 
   // ---------- Champ de particules en fond ----------
   const cv = document.getElementById("field"), ctx = cv.getContext("2d");
@@ -357,7 +447,7 @@ footer a { color: var(--muted); text-underline-offset: 3px; }
       const fall = reduce ? 0 : t * .025 * p.z; // chute lente, plus rapide pour les flocons proches
       const y = ((p.y + fall - sy * p.z) % H + H) % H;
       ctx.globalAlpha = p.g ? .9 : .25 + p.z * .35;
-      ctx.fillStyle = p.g ? gold : base;
+      ctx.fillStyle = grinchOn ? (p.g ? "#B8F27C" : GREEN) : (p.g ? gold : base);
       ctx.beginPath(); ctx.arc(x, y, p.g ? 1.6 : .6 + p.z * .9, 0, 6.283); ctx.fill();
     }
     if (!reduce) requestAnimationFrame(draw);
